@@ -1,0 +1,88 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: comosyme
+  name: edgex-common-variables
+data:
+  Logging_EnableRemote: {{.Values.env.loggingenableremote | quote}}
+  CLIENTS_CORE_COMMAND_HOST: {{.Values.edgex.app.core.command}}
+  CLIENTS_CORE_DATA_HOST: {{.Values.edgex.app.core.data}}
+  CLIENTS_CORE_METADATA_HOST: {{.Values.edgex.app.core.metadata}}
+  CLIENTS_SUPPORT_NOTIFICATIONS_HOST: {{.Values.edgex.app.support.notifications}}
+  CLIENTS_SUPPORT_SCHEDULER_HOST: {{.Values.edgex.app.support.scheduler}}
+  DATABASES_PRIMARY_HOST: {{.Values.edgex.app.db.redis}}
+  EDGEX_SECURITY_SECRET_STORE: {{.Values.env.securitysecretstore | quote}}
+  edgex_registry: {{.Values.env.edgexregistry}}
+  MESSAGEQUEUE_HOST: {{.Values.edgex.app.db.redis}}
+  REGISTRY_HOST: {{.Values.edgex.app.core.consul}}
+  TRIGGER_EDGEXMESSAGEBUS_PUBLISHHOST_HOST: {{.Values.edgex.app.db.redis}}
+  TRIGGER_EDGEXMESSAGEBUS_SUBSCRIBEHOST_HOST: {{.Values.edgex.app.db.redis}}
+  SERVICE_HOST: {{.Values.env.servicehost}}
+  # Custom services variables
+  # Device Services ENV vars
+  PH_SENSOR_NAME: {{.Values.env.phsensorname | quote}}
+  CONDUCTIVITY_SENSOR_NAME: {{.Values.env.conductivitysensorname | quote}}
+  DENSITY_SENSOR_NAME: {{.Values.env.densitysensorname | quote}}
+  T9501_SENSOR_NAME: {{.Values.env.t9501sensorname | quote}}
+  VERBOSE: {{.Values.env.verbose | quote}}
+  SERIAL_RESOURCE: {{.Values.env.serialresource}}
+  READ_GAP: {{.Values.env.readgap | quote}}
+  MODBUS_FILE: {{.Values.env.modbusfile}}
+  GPIO_CONFIG_FILE: {{.Values.env.gpiofile}}
+  START_TRIGGER: {{.Values.env.starttrigger | quote}}
+  REVERSE_TRIGGER: {{.Values.env.reversetrigger | quote}}
+  CLEAN_TRIGGER: {{.Values.env.cleantrigger | quote}}
+  OPEN_VALVE: {{.Values.env.openvalve | quote}}
+  SWITCHING_VALVE: {{.Values.env.switchvalve | quote}}
+  LIGHT: {{.Values.env.light | quote}}
+  PUMP_TIMEOUT: {{.Values.env.pumptimeout}}
+  COMMAND_GAP: {{.Values.env.commandgap}}
+  CLEAN_TIMEOUT: {{.Values.env.cleantimeout}}
+  REVERSE_TIMEOUT: {{.Values.env.reversetimeout}}
+  GRAVITY_TIMEOUT: {{.Values.env.gravitytimeout}}
+  ENABLE_CLEAN: {{.Values.env.enableclean | quote}}
+  ENABLE_REVERSE: {{.Values.env.enablereverse | quote}}
+  SCHEMEMQTTDEVICE: {{.Values.env.schememqttdevice}}
+  MQTTDEVICE_BROKER: {{.Values.env.mqttdevicebroker}}
+  MQTTDEVICE_BROKER_PORT: {{.Values.env.mqttdevicebrokerport | quote}}
+  CLIENTID_MQTTDEVICE: {{.Values.env.clientidmqttdevice}}
+  KEEPALIVE: {{.Values.env.keepalive | quote}}
+  QOSMQTTDEVICE: {{.Values.env.qosmqttdevice | quote}}
+  INCOMINGTOPIC: {{.Values.env.incomingtopic}}
+  MODBUS_DEVICE_ENDPOINT: {{.Values.env.modbusdeviceendpoint}}
+  # Application Services ENV vars
+  PROTOCOL: {{.Values.env.protocol}}
+  BROKER: {{.Values.env.broker}}
+  PORT: {{.Values.env.port | quote}}
+  CLIENTID_PH: {{.Values.env.clientidph}}
+  CLIENTID_CONDUCTIVITY: {{.Values.env.clientidconductivity}}
+  CLIENTID_DENSITY: {{.Values.env.clientiddensity}}
+  CLIENTID_T9501: {{.Values.env.clientidt9501}}
+  CLIENTID_GPIO: {{.Values.env.clientidgpio}}
+  CLIENTID_CONCENTRATION: {{.Values.env.clientidconcentration}}
+  USERNAME: {{.Values.env.user | quote}}
+  PASSWORD: {{.Values.env.password | quote}}
+  QOS: {{.Values.env.qos | quote}}
+  RETAINED: {{.Values.env.retained | quote}}
+  AUTORECONNECT: {{.Values.env.autoreconnect | quote}}
+  CLEANSESSION: {{.Values.env.cleansession | quote}}
+  STORE: {{.Values.env.store}}
+  CONNECTRETRY: {{.Values.env.connectretry | quote}}
+  CONNECTRETRYINTERVAL: {{.Values.env.connectretryinterval | quote}}
+  MQTT_LOG: {{.Values.env.mqttlog | quote}}
+  TLSCONNECTION: {{.Values.env.tlsconnection | quote}}
+  CLIENTAUTHORITY: {{.Values.env.clientauthority | quote}}
+  CLIENTCERTIFICATE: {{.Values.env.clientcertificate | quote}}
+  CLIENTKEY: {{.Values.env.clientkey | quote}}
+  IGNORE: {{.Values.env.ignore | quote}}
+  TOPIC_PH: {{.Values.env.topicph}}
+  TOPIC_DENSITY: {{.Values.env.topicdensity}}
+  TOPIC_T9501: {{.Values.env.topict9501}}
+  TOPIC_CONDUCTIVITY: {{.Values.env.topicconductivity}}
+  TOPIC_CONCENTRATION: {{.Values.env.topicconcentration}}
+  TOPIC_PREFIX: {{.Values.env.topicprefix}}
+  # Device commands variables
+  ACTION: {{.Values.env.device.command.action | quote}}
+  DEVICE_NAME: {{.Values.env.device.command.devicename | quote}}
+  COMMAND_NAME: {{.Values.env.device.command.commandname | quote}}
+  RESOURCE_NAME: {{.Values.env.device.command.resourcename | quote}}

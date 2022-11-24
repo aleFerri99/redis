@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: comosyme
+  labels:
+    org.edgexfoundry.service: {{.Values.edgex.app.application.servicet9501}}
+  name: {{.Values.edgex.app.application.servicet9501}}
+spec:
+  replicas: {{.Values.edgex.replicas.application.servicet9501}}
+  selector:
+    matchLabels:
+      org.edgexfoundry.service: {{.Values.edgex.app.application.servicet9501}}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        org.edgexfoundry.service: {{.Values.edgex.app.application.servicet9501}}
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: {{.Values.edgex.app.application.servicet9501}}
+        {{- if eq .Values.architecture "arm64" }}
+        image: {{.Values.edgex.image.application.servicet9501.arm64.repository}}:{{.Values.edgex.image.application.servicet9501.arm64.tag}}
+        {{- else }}
+        image: {{.Values.edgex.image.application.servicet9501.amd64.repository}}:{{.Values.edgex.image.application.servicet9501.amd64.tag}}
+        {{- end }}
+        imagePullPolicy: {{.Values.edgex.image.application.servicet9501.pullPolicy}}
+        envFrom:
+        - configMapRef:
+            name: edgex-common-variables
+        env:
+        - name: SERVICE_HOST
+          value: {{.Values.edgex.app.application.servicet9501}}
+        ports:
+        - containerPort: {{.Values.expose.nodePort.application.servicet9501}}
+        volumeMounts:
+        - name: zoneinfo
+          mountPath: /etc/localtime
+          subPath: CET
+          readOnly: true
+        - name: persistencepath
+          mountPath: /sensors_data/
+        - name: cpuinfo
+          mountPath: /proc/
+        readinessProbe:
+          httpGet:
+            path: /api/v2/ping
+            port: 59781
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /api/v2/ping
+            port: 59781
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+      {{- if .Values.edgex.resources.application.servicet9501.enforceLimits }}
+        resources:
+          limits:
+            memory: {{ .Values.edgex.resources.application.servicet9501.limits.memory }}
+            cpu: {{ .Values.edgex.resources.application.servicet9501.limits.cpu }}
+          requests:
+            memory: {{ .Values.edgex.resources.application.servicet9501.requests.memory }}
+            cpu: {{ .Values.edgex.resources.application.servicet9501.requests.cpu }}
+      {{- end}}
+      hostname: {{.Values.edgex.app.application.servicet9501}}
+      restartPolicy: Always
+      volumes:
+        - name: zoneinfo
+          hostPath:
+            path: /usr/share/zoneinfo
+        - name: persistencepath
+          hostPath:
+            path: /home/pi/sensors_data/
+        - name: cpuinfo
+          hostPath:
+            path: /proc/
+status: {}

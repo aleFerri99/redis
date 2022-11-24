@@ -1,0 +1,18 @@
+apiVersion: v1
+name: EdgeX
+version: 0.1.0
+appVersion: "ireland"
+description: A Helm chart for EdgeX Ireland Version
+keywords:
+  - Docker
+  - EdgeX
+  - Ireland
+home: https://www.edgexfoundry.org
+icon: https://https://www.edgexfoundry.org/wpcontent/uploads/sites/25/2017/04/logo_ef.png
+sources:
+  - https://github.com/edgexfoundry/edgex-go
+  - https://github.com/DaveZLB/edgex-helm
+maintainers:
+  - name: Libin Zhang
+    email: zlibin@vmware.com
+engine: gotpl

@@ -1,0 +1,1859 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_INFLUXDB",
+      "label": "InfluxDB",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "panel",
+      "id": "bargauge",
+      "name": "Bar gauge",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "gauge",
+      "name": "Gauge",
+      "version": ""
+    },
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "9.1.1"
+    },
+    {
+      "type": "datasource",
+      "id": "influxdb",
+      "name": "InfluxDB",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                41.4,
+                50.6
+              ],
+              "type": "outside_range"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
+            "type": "query"
+          },
+          {
+            "evaluator": {
+              "params": [
+                1000,
+                1200
+              ],
+              "type": "outside_range"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "B",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "last"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "message": "Kinematic Viscosity and/or Density out of range!",
+        "name": "Density Sensor TimeSeries alert",
+        "noDataState": "no_data",
+        "notifications": [
+          {
+            "uid": "De4kSo8nk"
+          }
+        ]
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*Frequence*./"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "rothz"
+              },
+              {
+                "id": "displayName",
+                "value": "Frequence"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*Phase*./"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Phase"
+              },
+              {
+                "id": "unit",
+                "value": "degree"
+              },
+              {
+                "id": "min",
+                "value": -180
+              },
+              {
+                "id": "max",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*Impedance*./"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Impedance"
+              },
+              {
+                "id": "unit",
+                "value": "ohm"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Temperature {sensor_name=\"concentration\", topic=\"Data/1000000033fec2d1/concentration\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Temperature"
+              },
+              {
+                "id": "min",
+                "value": -40
+              },
+              {
+                "id": "max",
+                "value": 120
+              },
+              {
+                "id": "unit",
+                "value": "celsius"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 19,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.1.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "method": "GET",
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"concentration\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Frequence_${Frequency_index}\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "hide": false,
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"concentration\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Impedance_${Frequency_index}\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "hide": false,
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"concentration\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Phase_${Frequency_index}\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "hide": false,
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"concentration\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Temperature\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "refId": "D"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "op": "lt",
+          "value": 41.4,
+          "visible": true
+        },
+        {
+          "colorMode": "critical",
+          "op": "gt",
+          "value": 50.6,
+          "visible": true
+        }
+      ],
+      "title": "Concentration TimeSeries",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          },
+          "displayName": "PumpStatus",
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 19,
+        "w": 17,
+        "x": 0,
+        "y": 15
+      },
+      "id": 28,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "method": "GET",
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"pump_gpio\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"State\")\r\n  |> filter(fn: (r) => r[\"topic\"] == \"Data/1000000033fec2d1/pump_gpio\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "Pump TimeSeries",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB}"
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 18,
+        "y": 15
+      },
+      "id": 25,
+      "options": {
+        "content": "<img src=https://d11wkw82a69pyn.cloudfront.net/siteassets/images/xma_dindi/concept_reply.png />",
+        "mode": "html"
+      },
+      "pluginVersion": "9.1.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB}"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 22
+      },
+      "id": 26,
+      "options": {
+        "content": "<img src=https://thertoinnovationsummit.eu/sites/default/files/2020-02/RISE_Logo_mText_Black.png />",
+        "mode": "html"
+      },
+      "pluginVersion": "9.1.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB}"
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 7,
+        "x": 17,
+        "y": 30
+      },
+      "id": 33,
+      "options": {
+        "SVGBaseFix": true,
+        "add100Percentage": false,
+        "calcsMutation": "standard",
+        "centerAlignContent": true,
+        "codeData": "{\n  \"samplingTime\": \"${samplingTime}\"\n}",
+        "css": "#myButton {\n    display: inline-flex;\n    -webkit-box-align: center;\n    align-items: center;\n    font-size: 18px;\n    font-weight: 500;\n    font-family: Roboto, Helvetica, Arial, sans-serif;\n    padding: 0px 20px;\n    height: 48px;\n    line-height: 46px;\n    letter-spacing: 0.01071em;\n    vertical-align: middle;\n    cursor: pointer;\n    border-radius: 40px;\n    background: rgb(163, 217, 217);\n    color: rgb(255, 255, 255);\n    border: 1px solid transparent;\n    transition: background-color 350ms;\n}\n\n#myButton:hover {\n    background: yellow;\n    color: black;\n}\n#myButton:active {\n  background-color: lightyellow;\n  transform: translateY(2px);\n}\n\n\n#myButtonIcon {\n    display: inline-block;\n    vertical-align: middle;\n    fill: currentcolor;\n    margin-right: 8px;\n    margin-left: -12px;\n    overflow: hidden;\n    \n}\n\n.myButtonText {\n    display: flex;\n    flex-direction: row;\n    -webkit-box-align: center;\n    align-items: center;\n    white-space: nowrap;\n    height: 100%;\n}\n\ndiv {\n  padding: 10px;\n}\n\ninput {\n  width:180px;\n  height:18px;\n  padding:7px;\n  border:1px solid black;\n}\n",
+        "dynamicData": false,
+        "dynamicFieldDisplayValues": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicProps": false,
+        "html": "<div id=\"mySubmitButtons\">\n    <button title=\"\" id=\"myButton\">\n        <div id=\"myButtonIcon\">💾</div>\n        <span class=\"myButtonText\">Export to .CSV</span>\n    </button>\n    <span id='status'></span>\n\n</div>\n",
+        "onInit": "// Sets the text from customProperties\nconst htmlgraphicsText = htmlNode.getElementById('htmlgraphics-text');\n\nif (htmlgraphicsText) {\n  htmlgraphicsText.textContent = customProperties.text;\n\n  // Change the text color based on the theme\n  if (theme.isDark) {\n    htmlgraphicsText.style.color = 'green';\n  } else {\n    htmlgraphicsText.style.color = 'red';\n  }\n}",
+        "onInitOnResize": false,
+        "onRender": "var myButton = htmlNode.getElementById(\"myButton\");\nvar myStartTime = parseInt(data.series[0].fields[0].values.buffer[0] / 1000);\nvar myStopTime = parseInt(data.series[0].fields[1].values.buffer[0] / 1000);\nvar samplingTime = getTemplateSrv().getVariables()[0].current.value\n\nvar queryBody = `\npH = from(bucket: \"hydraulic-smart-controller\")\n  |> range(start: ${myStartTime}, stop: ${myStopTime})\n  |> filter(fn: (r) => r[\"_measurement\"] == \"PH\")\n  |> filter(fn: (r) => r[\"_field\"] == \"Temperature\" or r[\"_field\"] == \"PhValue\")\n  |> aggregateWindow(every: ${samplingTime}, fn: last, createEmpty: false)\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> drop(columns: [\"sensor\"])\n  |> rename(columns: {Temperature: \"Temperature_pH\"})\n\ndensity = from(bucket: \"hydraulic-smart-controller\")\n  |> range(start: ${myStartTime}, stop: ${myStopTime})\n  |> filter(fn: (r) => r[\"_measurement\"] == \"DENSITY\")\n  |> filter(fn: (r) => r[\"_field\"] == \"Density\" or r[\"_field\"] == \"DynamicViscosity\" or r[\"_field\"] == \"Temperature\")\n  |> filter(fn: (r) => r[\"sensor\"] == \"DENSITY\")\n  |> aggregateWindow(every: ${samplingTime}, fn: last, createEmpty: false)\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> map(fn: (r) => ({\n    r with kinematicViscosity: (r.DynamicViscosity/r.Density)*1000.0\n  }))\n  |> drop(columns: [\"DynamicViscosity\", \"sensor\"])\n  |> rename(columns: {Temperature: \"Temperature_density\"})\n\nconductivity = from(bucket: \"hydraulic-smart-controller\")\n  |> range(start: ${myStartTime}, stop: ${myStopTime})\n  |> filter(fn: (r) => r[\"_measurement\"] == \"CONDUCTIVITY\")\n  |> filter(fn: (r) => r[\"_field\"] == \"Salinity\" or r[\"_field\"] == \"Tds\" or r[\"_field\"] == \"Temperature\" or r[\"_field\"] == \"ElectricalConductivity\")\n  |> aggregateWindow(every: ${samplingTime}, fn: last, createEmpty: false)\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> drop(columns: [\"sensor\"])\n  |> rename(columns: {Temperature: \"Temperature_conductivity\"})\n\nTempRelH = from(bucket: \"hydraulic-smart-controller\")\n  |> range(start: ${myStartTime}, stop: ${myStopTime})\n  |> filter(fn: (r) => r[\"_measurement\"] == \"T9501\")\n  |> filter(fn: (r) => r[\"_field\"] == \"Temperature\" or r[\"_field\"] == \"RelativeHumidity\")\n  |> aggregateWindow(every: ${samplingTime}, fn: last, createEmpty: false)\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> drop(columns: [\"sensor\"])\n  |> rename(columns: {Temperature: \"Temperature_T9501\"})\n\npH_density_join = join (\n    tables: {pH: pH, density: density},\n    on: [\"_time\", \"_stop\", \"_start\"]\n)\n\nconductivity_join = join (\n    tables: {pH_density_join: pH_density_join, conductivity: conductivity},\n    on: [\"_time\", \"_stop\", \"_start\"]\n)\n\njoin (\n    tables: {conductivity_join: conductivity_join, TempRelH: TempRelH},\n    on: [\"_time\", \"_stop\", \"_start\"]\n)\n  |> drop(columns: [\"_measurement_pH\", \"_measurement_density\", \"_measurement_conductivity_join\", \"_measurement_TempRelH\"])\n`;\n\nif (myButton) {\n  myButton.setAttribute(\"onclick\", `\n    //console.log('Button click detected');\n\n    function saveBlob(blob, fileName, rawData) {\n      try {\n        var uint8array = new TextEncoder(\"utf-8\").encode(rawData);\n        var string = new TextDecoder().decode(uint8array);\n        var rawData_cleanedExcessData = rawData.replaceAll(',_result,0,','');\n        var rawData_cleanedExcessHeaders = rawData_cleanedExcessData.replaceAll(',result,table,','');\n        \n\t\tvar hiddenElement = document.createElement('a');\n        hiddenElement.href = 'data:text/csv;charset=UTF-8,' + '\\uFEFF' + encodeURIComponent(rawData_cleanedExcessHeaders);\n        hiddenElement.target = '_blank';\n        hiddenElement.download = fileName;\n        hiddenElement.click();\n        Button_status.innerText = \"Download Complete!\";\n      } catch (error) {\n        Button_status.innerText = \"CSV Export Error!\";\n        console.log(error);\n      }\n    }\n    \n    this.disabled = true;\n    var exportButton = this;\n    var Button_status = this.parentElement.children[1];\n    var iconButton = this.children[0];\n    Button_status.innerText = \"requesting data...\";\n    \n    var xhttp = new XMLHttpRequest();\n    xhttp.open(\"POST\", \"http://172.16.8.177:32767/api/v2/query?org=influxdata\", true);\n    xhttp.setRequestHeader(\"Authorization\",\"Token UJTkwzYSbr4jF48PuvOY5Pz-9UqcwUffS3zrif4Rs6AeHZtvXnfN5VF4rbUwk6jxVMstchm0aKqRcXa9sxukZA==\");\n    xhttp.setRequestHeader(\"Accept\",\"application/csv\");\n    xhttp.setRequestHeader(\"Content-type\",\"application/vnd.flux\");\n    \n    var myDate = new Date();\n    var fileName = \"Graphs_\" + myDate.toISOString() + \".csv\";\n    \n    xhttp.onload = function () {\n        if (xhttp.readyState == 4 && xhttp.status == \"200\") {\n          console.log(\"Data has been downloaded...\");\n          var blob = new Blob([xhttp.responseText], {type:'text/csv'});\n                    \n          Button_status.innerText = \"Exporting to CSV...\";\n          saveBlob(blob, fileName, xhttp.responseText);\n          iconButton.innerText = \"✔\";\n          setTimeout(function(){ \n            iconButton.innerText = '💾'; \n            exportButton.disabled = false;\n            Button_status.innerText = \"\";\n          }, 1000);\n        } else {\n          //console.error(\"myError:\",xhttp.responseText);\n          iconButton.innerText = \"❌\";\n          iconButton.style.color = \"red\";\n          Button_status.innerText = \"Error in download process\";\n        }\n    }\n    xhttp.onerror = function () {\n        alert(\"Something went wrong!\");\n        iconButton.innerText = \"❌\";\n        iconButton.style.color = \"red\";\n        console.log(xhttp);\n    }\n    iconButton.innerText = \"⏳\";\n    xhttp.send(\\`${queryBody}\\`);\n  `\n  )\n}\n",
+        "overflow": "visible",
+        "panelupdateOnMount": true,
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull",
+            "last",
+            "first",
+            "firstNotNull",
+            "min",
+            "max",
+            "mean",
+            "sum",
+            "count",
+            "range",
+            "delta",
+            "step",
+            "diff",
+            "logmin",
+            "allIsZero",
+            "allIsNull",
+            "diffperc"
+          ]
+        },
+        "renderOnMount": true,
+        "rootCSS": ""
+      },
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "method": "GET",
+          "query": "pH = from(bucket: \"hydraulic-smart-controller\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"PH\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Temperature\" or r[\"_field\"] == \"PhValue\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> drop(columns: [\"sensor\"])\r\n  |> rename(columns: {Temperature: \"Temperature_pH\"})\r\n\r\ndensity = from(bucket: \"hydraulic-smart-controller\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"DENSITY\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Density\" or r[\"_field\"] == \"DynamicViscosity\" or r[\"_field\"] == \"Temperature\")\r\n  |> filter(fn: (r) => r[\"sensor\"] == \"DENSITY\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> map(fn: (r) => ({\r\n    r with kinematicViscosity: (r.DynamicViscosity/r.Density)*1000.0\r\n  }))\r\n  |> drop(columns: [\"DynamicViscosity\", \"sensor\"])\r\n  |> rename(columns: {Temperature: \"Temperature_density\"})\r\n\r\nconductivity = from(bucket: \"hydraulic-smart-controller\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"CONDUCTIVITY\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Salinity\" or r[\"_field\"] == \"Tds\" or r[\"_field\"] == \"Temperature\" or r[\"_field\"] == \"ElectricalConductivity\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> drop(columns: [\"sensor\"])\r\n  |> rename(columns: {Temperature: \"Temperature_conductivity\"})\r\n\r\nTempRelH = from(bucket: \"hydraulic-smart-controller\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"T9501\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Temperature\" or r[\"_field\"] == \"RelativeHumidity\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\r\n  |> drop(columns: [\"sensor\"])\r\n  |> rename(columns: {Temperature: \"Temperature_T9501\"})\r\n\r\npH_desnity_join = join (\r\n    tables: {pH: pH, density: density},\r\n    on: [\"_time\", \"_stop\", \"_start\"]\r\n)\r\n\r\nconductivity_join = join (\r\n    tables: {pH_desnity_join: pH_desnity_join, conductivity: conductivity},\r\n    on: [\"_time\", \"_stop\", \"_start\"]\r\n)\r\n\r\njoin (\r\n    tables: {conductivity_join: conductivity_join, TempRelH: TempRelH},\r\n    on: [\"_time\", \"_stop\", \"_start\"]\r\n)\r\n  |> drop(columns: [\"_measurement_pH\", \"_measurement_density\", \"_measurement_conductivity_join\", \"_measurement_TempRelH\"])\r\n  |> map(fn: (r) =>\r\n  { \r\n    return {\r\n      start: v.timeRangeStart,\r\n      stop: v.timeRangeStop\r\n    }\r\n  })",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "CSV download",
+      "transparent": true,
+      "type": "gapit-htmlgraphics-panel"
+    },
+    {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                8.5,
+                10.5
+              ],
+              "type": "outside_range"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "5m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "message": "Ph out of range!",
+        "name": "PH Sensor TimeSeries alert",
+        "noDataState": "no_data",
+        "notifications": [
+          {
+            "uid": "De4kSo8nk"
+          }
+        ]
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Temperature {sensor_name=\"pH\", topic=\"Data/1000000033fec2d1/pH\"}"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "celsius"
+              },
+              {
+                "id": "min",
+                "value": -40
+              },
+              {
+                "id": "max",
+                "value": 120
+              },
+              {
+                "id": "displayName",
+                "value": "Temperature"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PhValue {sensor_name=\"pH\", topic=\"Data/1000000033fec2d1/pH\"}"
+            },
+            "properties": [
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "max",
+                "value": 14
+              },
+              {
+                "id": "displayName",
+                "value": "pH"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "light-green",
+                      "value": null
+                    },
+                    {
+                      "color": "light-green",
+                      "value": 8.5
+                    },
+                    {
+                      "color": "light-green",
+                      "value": 10.5
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.thresholdsStyle",
+                "value": {
+                  "mode": "line"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 24,
+        "x": 0,
+        "y": 35
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "method": "GET",
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"pH\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"PhValue\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "hide": false,
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"pH\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Temperature\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "op": "lt",
+          "value": 8.5,
+          "visible": true
+        },
+        {
+          "colorMode": "critical",
+          "op": "gt",
+          "value": 10.5,
+          "visible": true
+        }
+      ],
+      "title": "PH Sensor TimeSeries",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Temperature {sensor_name=\"conductivity\", topic=\"Data/1000000033fec2d1/conductivity\"}"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "celsius"
+              },
+              {
+                "id": "min",
+                "value": -40
+              },
+              {
+                "id": "max",
+                "value": 120
+              },
+              {
+                "id": "displayName",
+                "value": "Temperature"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ElectricalConductivity {sensor_name=\"conductivity\", topic=\"Data/1000000033fec2d1/conductivity\"}"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "uS/cm"
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "max",
+                "value": 20000
+              },
+              {
+                "id": "displayName",
+                "value": "EC"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Salinity {sensor_name=\"conductivity\", topic=\"Data/1000000033fec2d1/conductivity\"}"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "mg/L"
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "max",
+                "value": 20000
+              },
+              {
+                "id": "displayName",
+                "value": "Salinity"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Tds {sensor_name=\"conductivity\", topic=\"Data/1000000033fec2d1/conductivity\"}"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "mg/L"
+              },
+              {
+                "id": "min",
+                "value": 0
+              },
+              {
+                "id": "max",
+                "value": 20000
+              },
+              {
+                "id": "displayName",
+                "value": "TDS"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 24,
+        "x": 0,
+        "y": 50
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "method": "GET",
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"conductivity\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"ElectricalConductivity\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "hide": false,
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"conductivity\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Salinity\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "hide": false,
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"conductivity\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Tds\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "hide": false,
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"conductivity\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Temperature\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "refId": "D"
+        }
+      ],
+      "title": "Conductivity Sensors TimeSeries",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [],
+          "max": 120,
+          "min": -40,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "blue",
+                "value": -40
+              },
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "#EAB839",
+                "value": 40
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Temperature {sensor_name=\"conductivity\", topic=\"Data/1000000033fec2d1/conductivity\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Conductivity"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Temperature {sensor_name=\"concentration\", topic=\"Data/1000000033fec2d1/concentration\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Concentration"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Temperature {sensor_name=\"pH\", topic=\"Data/1000000033fec2d1/pH\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "pH"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 65
+      },
+      "id": 13,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "9.1.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "method": "GET",
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"conductivity\" or r[\"sensor_name\"] == \"concentration\" or r[\"sensor_name\"] == \"pH\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Temperature\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "Temperatures Last Readings",
+      "transparent": true,
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 14,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "yellow"
+              },
+              {
+                "color": "green",
+                "value": 8.5
+              },
+              {
+                "color": "blue",
+                "value": 10.5
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 6,
+        "x": 0,
+        "y": 81
+      },
+      "id": 15,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "9.1.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "method": "GET",
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"pH\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"PhValue\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "PH Last Reading",
+      "transparent": true,
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 20000,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "orange",
+                "value": 5900
+              },
+              {
+                "color": "red",
+                "value": 8000
+              },
+              {
+                "color": "purple",
+                "value": 15000
+              }
+            ]
+          },
+          "unit": "us/cm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 6,
+        "x": 6,
+        "y": 81
+      },
+      "id": 16,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "9.1.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "method": "GET",
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"conductivity\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"ElectricalConductivity\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "EC Last Reading",
+      "transparent": true,
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 20000,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "blue",
+                "value": 5000
+              },
+              {
+                "color": "yellow",
+                "value": 10000
+              },
+              {
+                "color": "red",
+                "value": 15000
+              }
+            ]
+          },
+          "unit": "mg/L"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 6,
+        "x": 12,
+        "y": 81
+      },
+      "id": 17,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "9.1.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "method": "GET",
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"conductivity\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Salinity\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "Salinity Last Reading",
+      "transparent": true,
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 20000,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "orange",
+                "value": 5000
+              },
+              {
+                "color": "red",
+                "value": 10000
+              },
+              {
+                "color": "blue",
+                "value": 15000
+              }
+            ]
+          },
+          "unit": "mg/L"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 6,
+        "x": 18,
+        "y": 81
+      },
+      "id": 18,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "9.1.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "method": "GET",
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"conductivity\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"Tds\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "TDS Last Reading",
+      "transparent": true,
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PhCalibrationRawAd {sensor_name=\"pH\", topic=\"Data/1000000033fec2d1/pH\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PhCalibrationRawAd"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PhCalibrationRawAd0 {sensor_name=\"pH\", topic=\"Data/1000000033fec2d1/pH\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PhCalibrationRawAd0"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PhCalibrationRawAd1 {sensor_name=\"pH\", topic=\"Data/1000000033fec2d1/pH\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PhCalibrationRawAd1"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "PhCalibrationRawAd2 {sensor_name=\"pH\", topic=\"Data/1000000033fec2d1/pH\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PhCalibrationRawAd2"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 92
+      },
+      "id": 7,
+      "options": {
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "9.1.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "method": "GET",
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"pH\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"PhCalibrationRawAd\" or r[\"_field\"] == \"PhCalibrationRawAd0\" or r[\"_field\"] == \"PhCalibrationRawAd1\" or r[\"_field\"] == \"PhCalibrationRawAd2\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\r\n  |> yield(name: \"mean\")",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "PH Sensor Calibration parameters",
+      "transparent": true,
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "${DS_INFLUXDB}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "purple"
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "EcCalib_12880 {sensor_name=\"conductivity\", topic=\"Data/1000000033fec2d1/conductivity\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "EcCalib_12880"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "EcCalib_1413 {sensor_name=\"conductivity\", topic=\"Data/1000000033fec2d1/conductivity\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "EcCalib_1413"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "EcRawAd {sensor_name=\"conductivity\", topic=\"Data/1000000033fec2d1/conductivity\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "EcRawAd"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "EcTempCoff {sensor_name=\"conductivity\", topic=\"Data/1000000033fec2d1/conductivity\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "EcTempCoff"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ElectrodeConst {sensor_name=\"conductivity\", topic=\"Data/1000000033fec2d1/conductivity\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "ElectrodeConst"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "SalinityCoff {sensor_name=\"conductivity\", topic=\"Data/1000000033fec2d1/conductivity\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "SalinityCoff"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TdsCoff {sensor_name=\"conductivity\", topic=\"Data/1000000033fec2d1/conductivity\"}"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "TdsCoff"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 92
+      },
+      "id": 8,
+      "options": {
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "9.1.1",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "influxdb",
+            "uid": "${DS_INFLUXDB}"
+          },
+          "fields": [
+            {
+              "jsonPath": ""
+            }
+          ],
+          "method": "GET",
+          "query": "from(bucket: \"OilMonitoringData\")\r\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\r\n  |> filter(fn: (r) => r[\"_measurement\"] == \"1000000033fec2d1\")\r\n  |> filter(fn: (r) => r[\"sensor_name\"] == \"conductivity\")\r\n  |> filter(fn: (r) => r[\"_field\"] == \"EcRawAd\" or r[\"_field\"] == \"EcTempCoff\" or r[\"_field\"] == \"SalinityCoff\" or r[\"_field\"] == \"TdsCoff\" or r[\"_field\"] == \"ElectrodeConst\" or r[\"_field\"] == \"EcCalib_1413\" or r[\"_field\"] == \"EcCalib_12880\")\r\n  |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\r\n  |> yield(name: \"last\")",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": ""
+        }
+      ],
+      "title": "Conductivity Sensor Calibration parameters",
+      "transparent": true,
+      "type": "bargauge"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 37,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "1s",
+          "value": "1s"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "samplingTime",
+        "options": [
+          {
+            "selected": false,
+            "text": "1ms",
+            "value": "1ms"
+          },
+          {
+            "selected": true,
+            "text": "1s",
+            "value": "1s"
+          },
+          {
+            "selected": false,
+            "text": "1m",
+            "value": "1m"
+          },
+          {
+            "selected": false,
+            "text": "1h",
+            "value": "1h"
+          }
+        ],
+        "query": "1ms, 1s, 1m, 1h",
+        "queryValue": "",
+        "skipUrlSync": false,
+        "type": "custom"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "influxdb",
+          "uid": "${DS_INFLUXDB}"
+        },
+        "definition": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.measurementFieldKeys(\r\n    bucket: \"OilMonitoringData\",\r\n    measurement: \"1000000033fec2d1\",\r\n)\r\n\r\n",
+        "description": "Concentration sensor index",
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "Frequency_index",
+        "options": [],
+        "query": "import \"influxdata/influxdb/schema\"\r\n\r\nschema.measurementFieldKeys(\r\n    bucket: \"OilMonitoringData\",\r\n    measurement: \"1000000033fec2d1\",\r\n)\r\n\r\n",
+        "refresh": 1,
+        "regex": "/.*^[A-Za-z]+_([0-9]{1,2}).*/",
+        "skipUrlSync": false,
+        "sort": 3,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "HSC Prototype1",
+  "uid": "taueYpL7z",
+  "version": 8,
+  "weekStart": ""
+}

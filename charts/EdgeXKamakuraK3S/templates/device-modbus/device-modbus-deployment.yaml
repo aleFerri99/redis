@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: comosyme
+  labels:
+    org.edgexfoundry.service: {{.Values.edgex.app.device.modbus}}
+  name: {{.Values.edgex.app.device.modbus}}
+spec:
+  replicas: {{.Values.edgex.replicas.device.modbus}}
+  selector:
+    matchLabels:
+      org.edgexfoundry.service: {{.Values.edgex.app.device.modbus}}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        org.edgexfoundry.service: {{.Values.edgex.app.device.modbus}}
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: {{.Values.edgex.app.device.modbus}}
+        {{- if eq .Values.architecture "arm64" }}
+        image: {{.Values.edgex.image.device.modbus.arm64.repository}}:{{.Values.edgex.image.device.modbus.arm64.tag}}
+        {{- else }}
+        image: {{.Values.edgex.image.device.modbus.amd64.repository}}:{{.Values.edgex.image.device.modbus.amd64.tag}}
+        {{- end }}
+        imagePullPolicy: {{.Values.edgex.image.device.modbus.pullPolicy}}
+        command: ["/device-modbus"]
+        args: ["-cp=consul.http://edgex-core-consul:8500", "--registry", "--confdir=/res"]
+        securityContext:
+          runAsUser: 0
+          privileged: true
+        envFrom:
+        - configMapRef:
+            name: edgex-common-variables
+        ## This override is mandatory to use device commands through core command service. SERVICE_HOST=0.0.0.0:<servicePort> will result into a connection refused error
+        env:
+        - name: SERVICE_HOST
+          value: {{.Values.edgex.app.device.modbus}}
+        ports:
+        - containerPort: {{.Values.expose.nodePort.device.modbus}}
+        volumeMounts:
+        - name: zoneinfo
+          mountPath: /etc/localtime
+          subPath: CET
+          readOnly: true
+        - name: modbus
+          mountPath: {{.Values.env.serialresource}}
+        - name: persistencepath
+          mountPath: /sensors_data/
+        - name: modbusconfig
+          mountPath: /modbus_configuration/
+        readinessProbe:
+          httpGet:
+            path: /api/v2/ping
+            port: 59999
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /api/v2/ping
+            port: 59999
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+      {{- if .Values.edgex.resources.device.modbus.enforceLimits }}
+        resources:
+          limits:
+            memory: {{ .Values.edgex.resources.device.modbus.limits.memory }}
+            cpu: {{ .Values.edgex.resources.device.modbus.limits.cpu }}
+          requests:
+            memory: {{ .Values.edgex.resources.device.modbus.requests.memory }}
+            cpu: {{ .Values.edgex.resources.device.modbus.requests.cpu }}
+      {{- end}}
+      hostname: {{.Values.edgex.app.device.modbus}}
+      restartPolicy: Always
+      volumes:
+        - name: zoneinfo
+          hostPath:
+            path: /usr/share/zoneinfo
+        - name: modbus
+          hostPath:
+            path:  {{.Values.env.serialresource}}
+        - name: persistencepath
+          hostPath:
+            path: /home/pi/sensors_data/
+        - name: modbusconfig
+          hostPath:
+            path: /home/pi/modbus_configuration/
+status: {}

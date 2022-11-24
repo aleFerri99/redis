@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: comosyme
+  labels:
+    org.edgexfoundry.service: {{.Values.edgex.app.ui.kuiper}}
+  name: {{.Values.edgex.app.ui.kuiper}}
+spec:
+  replicas: {{.Values.edgex.replicas.ui.kuiper}}
+  selector:
+    matchLabels:
+      org.edgexfoundry.service: {{.Values.edgex.app.ui.kuiper}}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        org.edgexfoundry.service: {{.Values.edgex.app.ui.kuiper}}
+    spec:
+      containers:
+      - name: {{.Values.edgex.app.ui.kuiper}}
+        image: {{.Values.edgex.image.ui.kuiper.repository}}:{{.Values.edgex.image.ui.kuiper.tag}}
+        imagePullPolicy: {{.Values.edgex.image.ui.kuiper.pullPolicy}}
+        ports:
+        - containerPort: 9081
+        envFrom:
+        - configMapRef:
+            name: edgex-common-variables
+        readinessProbe:
+          tcpSocket:
+            port: 9081
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          tcpSocket:
+            port: 9081
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+      {{- if .Values.edgex.resources.ui.kuiper.enforceLimits }}
+        resources:
+          limits:
+            memory: {{ .Values.edgex.resources.ui.kuiper.limits.memory }}
+            cpu: {{ .Values.edgex.resources.ui.kuiper.limits.cpu }}
+          requests:
+            memory: {{ .Values.edgex.resources.ui.kuiper.requests.memory }}
+            cpu: {{ .Values.edgex.resources.ui.kuiper.requests.cpu }}
+      {{- end}}
+      hostname: {{.Values.edgex.app.ui.kuiper}}
+      restartPolicy: Always
+      #nodeSelector:
+      #  kubernetes.io/arch: 'amd64'       
+status: {}

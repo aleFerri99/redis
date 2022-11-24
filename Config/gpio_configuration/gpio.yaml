@@ -1,0 +1,16 @@
+gpio:
+  - name: pump_gpio
+    chip: gpiochip2
+    line: 0
+  - name: pump_reverse_gpio
+    chip: gpiochip2
+    line: 1
+  - name: clean_gpio
+    chip: gpiochip2
+    line: 2
+  - name: open_gpio
+    chip: gpiochip2
+    line: 3
+  - name: switch_gpio
+    chip: gpiochip2
+    line: 4

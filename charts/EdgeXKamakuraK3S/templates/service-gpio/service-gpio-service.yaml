@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: comosyme
+  labels:
+    org.edgexfoundry.service: {{.Values.edgex.app.application.servicegpio}}
+  name: {{.Values.edgex.app.application.servicegpio}}
+spec:
+  ports:
+  - name: "59782"
+    port: 59782
+    targetPort: 59782
+    nodePort: {{.Values.expose.nodePort.application.servicegpio}}
+  selector:
+    org.edgexfoundry.service: {{.Values.edgex.app.application.servicegpio}}
+  type: {{.Values.expose.type}}
+status:
+  loadBalancer: {}

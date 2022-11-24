@@ -1,0 +1,86 @@
+[Writable]
+LogLevel = "INFO"
+  [Writable.StoreAndForward]
+  Enabled = false
+  RetryInterval = "5m"
+  MaxRetryCount = 10
+  [Writable.InsecureSecrets]
+    [Writable.InsecureSecrets.DB]
+    path = "redisdb"
+      [Writable.InsecureSecrets.DB.Secrets]
+      username = ""
+      password = ""
+
+[Service]
+HealthCheckInterval = "10s"
+Host = "density-application-service"
+Port = 59783 # Adjust if running multiple examples at the same time to avoid duplicate port conflicts
+ServerBindAddr = "" # if blank, uses default Go behavior https://golang.org/pkg/net/#Listen
+StartupMsg = "This Application Service handle the conversion of MODBUS raw data to readable data"
+RequestTimeout = "30s"
+MaxRequestSize = 0
+MaxResultCount = 0
+
+[Registry]
+Host = "edgex-consul"
+Port = 8500
+Type = "consul"
+
+# Database is require when Store and Forward is enabled
+[Database]
+Type = "redisdb"
+Host = "edgex-redis"
+Port = 6379
+Timeout = "30s"
+
+# SecretStore is required when Store and Forward is enabled and running with security
+# so Database credentials can be pulled from Vault.
+# Note when running in docker from compose file set the following environment variables:
+#   - SecretStore_Host: edgex-vault
+[SecretStore]
+Type = "vault"
+Host = "edgex-vault"
+Port = 8200
+Path = "app-density-mqtt-telegraf/"
+Protocol = "http"
+TokenFile = "/tmp/edgex/secrets/app-density-mqtt-telegraf/secrets-token.json"
+RootCaCertPath = ""
+ServerName = ""
+[SecretStore.Authentication]
+AuthType = "X-Vault-Token"
+
+[Clients]
+  [Clients.core-data]
+  Protocol = "http"
+  Host = "edgex-core-data"
+  Port = 59880
+
+  [Clients.core-metadata]
+  Protocol = "http"
+  Host = "edgex-core-metadata"
+  Port = 59881
+
+  [Clients.core-command]
+  Protocol = "http"
+  Host = "edgex-core-command"
+  Port = 59882
+
+# Choose either an HTTP trigger or edgex-messagebus trigger
+
+#[Trigger]
+#Type="http"
+
+[Trigger]
+Type="edgex-messagebus"
+  [Trigger.EdgexMessageBus]
+  Type = "redis"
+    [Trigger.EdgexMessageBus.SubscribeHost]
+    Host = "edgex-redis"
+    Port = 6379
+    Protocol = "redis"
+    SubscribeTopics="edgex/events/#"
+
+# App Service specifc simple settings
+# Great for single string settings
+[ApplicationSettings]
+DeviceNames = "Modbus-Device01, Modbus-Device, Modbus"

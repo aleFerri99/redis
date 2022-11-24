@@ -1,0 +1,9 @@
+[[DeviceList]]
+  Name = "ConcentrationSensorDevice"
+  ProfileName = "ConcentrationSensorProfile"
+  Description = "MQTT device is created for test purpose"
+  Labels = [ "MQTT", "test" ]
+  [DeviceList.Protocols]
+    [DeviceList.Protocols.mqtt]
+       # Comment out/remove below to use multi-level topics
+       CommandTopic = "CommandTopic"

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: comosyme
+  labels:
+    org.edgexfoundry.service: {{.Values.edgex.app.ui.kuiper}}
+  name: {{.Values.edgex.app.ui.kuiper}}
+spec:
+  ports:
+  - name: "9081"
+    port: 9081
+    targetPort: 9081
+    nodePort: {{.Values.expose.nodePort.ui.kuiper}}   #???
+  selector:
+    org.edgexfoundry.service: {{.Values.edgex.app.ui.kuiper}}
+  type: {{.Values.expose.type}}
+status:
+  loadBalancer: {}

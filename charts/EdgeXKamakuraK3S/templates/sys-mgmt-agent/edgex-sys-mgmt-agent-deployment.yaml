@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: comosyme
+  labels:
+    org.edgexfoundry.service: {{.Values.edgex.app.system.mgmtagent}}
+  name: {{.Values.edgex.app.system.mgmtagent}}
+spec:
+  replicas: {{.Values.edgex.replicas.system.mgmtagent}}
+  selector:
+    matchLabels:
+      org.edgexfoundry.service: {{.Values.edgex.app.system.mgmtagent}}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        org.edgexfoundry.service: {{.Values.edgex.app.system.mgmtagent}}
+    spec:
+      containers:
+      - name: {{.Values.edgex.app.system.mgmtagent}}
+        {{- if eq .Values.architecture "arm64" }}
+        image: {{.Values.edgex.image.system.mgmtagent.arm64.repository}}:{{.Values.edgex.image.system.mgmtagent.arm64.tag}}
+        {{- else }}
+        image: {{.Values.edgex.image.system.mgmtagent.amd64.repository}}:{{.Values.edgex.image.system.mgmtagent.amd64.tag}}
+        {{- end }}
+        imagePullPolicy: {{.Values.edgex.image.system.mgmtagent.pullPolicy}}
+        command: ["/sys-mgmt-agent"]
+        args: ["-cp=consul.http://edgex-core-consul:8500", "--registry", "--confdir=/res"]
+        ports:
+        - containerPort: 58890
+        env:
+        - name: SERVICE_HOST
+          value: {{.Values.edgex.app.system.mgmtagent}}
+        envFrom:
+        - configMapRef:
+            name: edgex-common-variables
+        readinessProbe:
+          httpGet:
+            path: /api/v2/ping
+            port: 58890
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /api/v2/ping
+            port: 58890
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+      {{- if .Values.edgex.resources.system.mgmtagent.enforceLimits }}
+        resources:
+          limits:
+            memory: {{ .Values.edgex.resources.system.mgmtagent.limits.memory }}
+            cpu: {{ .Values.edgex.resources.system.mgmtagent.limits.cpu }}
+          requests:
+            memory: {{ .Values.edgex.resources.system.mgmtagent.requests.memory }}
+            cpu: {{ .Values.edgex.resources.system.mgmtagent.requests.cpu }}
+      {{- end}}
+      hostname: {{.Values.edgex.app.system.mgmtagent}}
+      restartPolicy: Always
+      #nodeSelector:
+      #  kubernetes.io/arch: 'amd64'       
+status: {}

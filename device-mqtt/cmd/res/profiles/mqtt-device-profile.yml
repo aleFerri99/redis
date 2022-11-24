@@ -1,0 +1,23 @@
+name: "ConcentrationSensorProfile"
+manufacturer: "RISE"
+model: "Wavi"
+description: "Concentration sensor"
+labels:
+  - "mqtt"
+  - "test"
+deviceResources:
+  -
+    name: data
+    isHidden: false
+    description: "sensor measurement"
+    properties:
+      valueType: "String"
+      readWrite: "R"
+
+deviceCommands:
+  -
+    name: values
+    readWrite: "R"
+    isHidden: false
+    resourceOperations:
+        - { deviceResource: "data" }

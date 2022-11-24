@@ -1,0 +1,9 @@
+[[DeviceList]]
+  Name = 'device-modbus'
+  ProfileName = 'device-modbus'
+  Description = 'Modbus handler'
+  Labels = [ 'industrial', 'modbus' ]
+  [DeviceList.Protocols]
+    [DeviceList.Protocols.other]
+      Address = 'modbus'
+      Port = '300'

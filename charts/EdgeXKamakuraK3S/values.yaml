@@ -1,0 +1,494 @@
+# Default values for Edgex.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+architecture: arm64
+
+env:
+  phsensorname: ph
+  conductivitysensorname: conductivity
+  densitysensorname: density
+  t9501sensorname: t9501
+  loggingenableremote: false
+  securitysecretstore: false
+  edgexregistry: consul://{{.Values.edgex.app.core.consul}}:8500
+  servicehost: 0.2.0.0
+  verbose: false
+  serialresource: /dev/serial0
+  readgap: 1s
+  modbusfile: /modbus_configuration/modbus.yaml
+  gpiofile: /gpio_configuration/gpio.yaml
+  starttrigger: pump_gpio
+  reversetrigger: pump_reverse_gpio
+  cleantrigger: clean_gpio
+  openvalve: clean_valve
+  switchvalve: switch_valve
+  light: light
+  pumptimeout: 5m
+  commandgap: 60m
+  cleantimeout: 5m
+  reversetimeout: 5m
+  gravitytimeout: 5m
+  enableclean: true
+  enablereverse: true
+  modbusdeviceendpoint: http://device-modbus:59999/api/v2/ping
+  
+  schememqttdevice: "tcp"
+  mqttdevicebroker: "comosyme.cloud.reply.eu"
+  mqttdevicebrokerport: 1883
+  clientidmqttdevice: wavi-client
+  keepalive: 3600
+  qosmqttdevice: 0
+  incomingtopic: "RedPitaya"
+  protocol: tcp://
+  broker: "comosyme.cloud.reply.eu"
+  port: 1883
+  clientidph: ph-client
+  clientidconcentration: concentration-client
+  clientidconductivity: conductivity-client
+  clientiddensity: density-client
+  clientidt9501: t9501-client
+  clientidgpio: gpio-client
+  user: "FieldDevices"
+  password: "IoTCoMoSyMe!"
+  qos: 1
+  retained: false
+  autoreconnect: true
+  cleansession: true
+  store: /sensors_data/persistence_client_data.db
+  connectretry: true
+  connectretryinterval: 3
+  tlsconnection: false
+  clientauthority: ""
+  clientcertificate: ""
+  clientkey: ""
+  ignore: false
+  topicph: /pH
+  topicconductivity: /conductivity
+  topicconcentration: /concentration
+  topicdensity: /denstiy
+  topict9501: /t9501
+  topicprefix: Data/
+  mqttlog: false
+  device:
+    command:
+      action: set
+      devicename: device-modbus
+      commandname: Modbus-Command
+      resourcename: GPIO
+
+expose:
+  # Option value: ClusterIP/NodePort/LoadBalancer
+  type: NodePort
+  nodePort:
+    core:
+      data: 32767
+      metadata: 30081
+      command: 30082
+      consul: 30850
+    support:
+      scheduler: 30085
+      notifications: 30060
+    db:
+      redis: 30079
+    ui:
+      kuiper: 30022
+    rules:
+      engine: 30072
+    system:
+      mgmtagent: 30890
+    device:
+      modbus: 32000
+      gpio: 32001
+      mqtt: 32003
+    application: 
+      serviceph: 31994
+      serviceconductivity: 31995
+      servicedensity: 31996
+      servicet9501: 31997
+      servicegpio: 31998
+      serviceconcentration: 31999
+# edgex defines a set of configuration properties for application-level concerns
+edgex:
+  # app defines a single point in naming/referring to an application. For each application, the value
+  # define its label name, resource name or base of the resource name, and service name.
+  app:
+    core:
+      command: edgex-core-command
+      data: edgex-core-data
+      metadata: edgex-core-metadata
+      consul: edgex-core-consul
+    support:
+      scheduler: edgex-support-scheduler
+      notifications: edgex-support-notifications
+    device:
+      modbus: device-modbus
+      gpio: device-gpiod
+      mqtt: device-mqtt
+    db:
+      redis: edgex-redis
+    ui:
+      kuiper: edgex-kuiper
+    rules:
+      engine: edgex-app-rules-engine
+    system:
+      mgmtagent: edgex-sys-mgmt-agent
+    application: 
+      serviceph: service-ph
+      serviceconductivity: service-conductivity
+      servicedensity: service-density
+      servicet9501: service-t9501
+      servicegpio: service-gpio
+      serviceconcentration: service-concentration
+  # image defines configuration properties for docker-image-level concerns
+  image:
+    core:
+      command:
+        arm64:
+          repository: edgexfoundry/core-command-arm64
+          tag: 2.2.0
+        amd64:
+          repository: edgexfoundry/core-command
+          tag: 2.2.0
+        pullPolicy: IfNotPresent
+      data:
+        arm64:
+          repository: edgexfoundry/core-data-arm64
+          tag: 2.2.0
+        amd64:
+          repository: edgexfoundry/core-data
+          tag: 2.2.0
+        pullPolicy: IfNotPresent
+      metadata:
+        arm64:
+          repository: edgexfoundry/core-metadata-arm64
+          tag: 2.2.0
+        amd64:
+          repository: edgexfoundry/core-metadata
+          tag: 2.2.0
+        pullPolicy: IfNotPresent
+      consul:
+        repository: consul
+        tag: 1.10.10
+        pullPolicy: IfNotPresent
+    db:
+      redis: 
+        repository: redis
+        tag: 6.2.6-alpine
+        pullPolicy: IfNotPresent
+    ui:
+      kuiper:
+        repository: lfedge/ekuiper
+        tag: 1.4.4-alpine
+        pullPolicy: IfNotPresent
+    rules:
+      engine:
+        arm64:
+          repository: edgexfoundry/app-service-configurable-arm64
+          tag: 2.2.0
+        amd64:
+          repository: edgexfoundry/app-service-configurable
+          tag: 2.2.0
+        pullPolicy: IfNotPresent
+    system:
+      mgmtagent:
+        arm64:
+          repository: edgexfoundry/sys-mgmt-agent-arm64
+          tag: 2.2.0
+        amd64:
+          repository: edgexfoundry/sys-mgmt-agent
+          tag: 2.2.0
+        pullPolicy: IfNotPresent
+    support:
+      scheduler:
+        arm64:
+          repository: edgexfoundry/support-scheduler-arm64
+          tag: 2.2.0
+        amd64:
+          repository: edgexfoundry/support-scheduler
+          tag: 2.2.0
+        pullPolicy: IfNotPresent
+      notifications:
+        arm64:
+          repository: edgexfoundry/support-notifications-arm64
+          tag: 2.2.0
+        amd64:
+          repository: edgexfoundry/support-notifications
+          tag: 2.2.0
+        pullPolicy: IfNotPresent
+    device:
+      modbus:
+        arm64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/device-modbus
+          tag: 0.2.0-arm64
+        amd64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/device-modbus
+          tag: 0.2.0-amd64
+        pullPolicy: IfNotPresent
+      gpio:
+        arm64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/device-gpiod
+          tag: 0.2.0-arm64
+        amd64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/device-gpiod
+          tag: 0.2.0-amd64
+        pullPolicy: IfNotPresent
+      mqtt:
+        arm64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/device-mqtt
+          tag: 0.2.0-arm64
+        amd64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/device-mqtt
+          tag: 0.2.0-amd64
+        pullPolicy: IfNotPresent
+    application:
+      serviceph:
+        arm64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/app-ph-mqtt-telegraf
+          tag: 0.2.0-arm64
+        amd64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/app-ph-mqtt-telegraf
+          tag: 0.2.0-amd64
+        pullPolicy: IfNotPresent
+      serviceconductivity:
+        arm64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/app-conductivity-mqtt-telegraf
+          tag: 0.2.0-arm64
+        amd64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/app-conductivity-mqtt-telegraf
+          tag: 0.2.0-amd64
+        pullPolicy: IfNotPresent
+      servicedensity:
+        arm64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/app-density-mqtt-telegraf
+          tag: 0.2.0-arm64
+        amd64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/app-density-mqtt-telegraf
+          tag: 0.2.0-amd64
+        pullPolicy: IfNotPresent
+      servicet9501:
+        arm64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/app-t9501-mqtt-telegraf
+          tag: 0.2.0-arm64
+        amd64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/app-t9501-mqtt-telegraf
+          tag: 0.2.0-amd64
+        pullPolicy: IfNotPresent
+      servicegpio:
+        arm64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/app-gpio-mqtt-telegraf
+          tag: 0.2.0-arm64
+        amd64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/app-gpio-mqtt-telegraf
+          tag: 0.2.0-amd64
+        pullPolicy: IfNotPresent
+      serviceconcentration:
+        arm64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/app-concentration-mqtt-telegraf
+          tag: 0.2.0-arm64
+        amd64:
+          repository: gufiregistry.cloud.reply.eu/comosyme/app-concentration-mqtt-telegraf
+          tag: 0.2.0-amd64
+        pullPolicy: IfNotPresent
+    
+  # replicas defines the number of replicas in a Deployment for the respective application
+  replicas:
+    core:
+      command: 1
+      data: 1
+      metadata: 1
+      consul: 1
+    support:
+      scheduler: 1
+      notifications: 1
+    db:
+      redis: 1
+    ui:
+      kuiper: 1
+    rules:
+      engine: 1
+    system:
+      mgmtagent: 1
+    device:
+      modbus: 1
+      gpio: 1
+      mqtt: 1
+    application:
+      serviceph: 1
+      serviceconductivity: 1
+      servicedensity: 1
+      servicet9501: 1
+      servicegpio: 1
+      serviceconcentration: 1
+  # resources defines the cpu and memory limits and requests for the respective application
+  resources:
+    core:
+      command:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+      data:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+      metadata:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+      consul:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+    db:
+      redis:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+    ui:
+      kuiper:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+    rules:
+      engine:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+    support:
+      scheduler:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+      notifications:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+    system:
+      mgmtagent:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+    device:
+      modbus:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+      gpio:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+      mqtt:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+    application:
+      serviceph:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+      serviceconductivity:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+      servicedensity:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+      servicet9501:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+      servicegpio:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+      serviceconcentration:
+        enforceLimits: false
+        limits:
+          cpu: 1
+          memory: 512Mi
+        requests:
+          cpu: 0.5
+          memory: 256Mi
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: true
+serviceAccount:
+  # Specifies whether a ServiceAccount should be created
+  create: true
+  # The name of the ServiceAccount to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name:

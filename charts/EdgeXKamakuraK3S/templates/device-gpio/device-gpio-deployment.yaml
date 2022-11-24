@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: comosyme
+  labels:
+    org.edgexfoundry.service: {{.Values.edgex.app.device.gpio}}
+  name: {{.Values.edgex.app.device.gpio}}
+spec:
+  replicas: {{.Values.edgex.replicas.device.gpio}}
+  selector:
+    matchLabels:
+      org.edgexfoundry.service: {{.Values.edgex.app.device.gpio}}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        org.edgexfoundry.service: {{.Values.edgex.app.device.gpio}}
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: {{.Values.edgex.app.device.gpio}}
+        {{- if eq .Values.architecture "arm64" }}
+        image: {{.Values.edgex.image.device.gpio.arm64.repository}}:{{.Values.edgex.image.device.gpio.arm64.tag}}
+        {{- else }}
+        image: {{.Values.edgex.image.device.gpio.amd64.repository}}:{{.Values.edgex.image.device.gpio.amd64.tag}}
+        {{- end }}
+        imagePullPolicy: {{.Values.edgex.image.device.gpio.pullPolicy}}
+        command: ["/device-gpiod"]
+        args: ["-cp=consul.http://edgex-core-consul:8500", "--registry", "--confdir=/res"]
+        securityContext:
+          runAsUser: 0
+          privileged: true
+        envFrom:
+        - configMapRef:
+            name: edgex-common-variables
+        env:
+        - name: SERVICE_HOST
+          value: {{.Values.edgex.app.device.gpio}}
+        ports:
+        - containerPort: {{.Values.expose.nodePort.device.gpio}}
+        volumeMounts:
+        - name: zoneinfo
+          mountPath: /etc/localtime
+          subPath: CET
+          readOnly: true
+        - name: gpio
+          mountPath: {{.Values.env.serialresource}}
+        - name: persistencepath
+          mountPath: /sensors_data/
+        - name: gpioconfig
+          mountPath: /gpio_configuration/
+        readinessProbe:
+          httpGet:
+            path: /api/v2/ping
+            port: 60000
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /api/v2/ping
+            port: 60000
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+      {{- if .Values.edgex.resources.device.gpio.enforceLimits }}
+        resources:
+          limits:
+            memory: {{ .Values.edgex.resources.device.gpio.limits.memory }}
+            cpu: {{ .Values.edgex.resources.device.gpio.limits.cpu }}
+          requests:
+            memory: {{ .Values.edgex.resources.device.gpio.requests.memory }}
+            cpu: {{ .Values.edgex.resources.device.gpio.requests.cpu }}
+      {{- end}}
+      hostname: {{.Values.edgex.app.device.gpio}}
+      restartPolicy: Always
+      volumes:
+        - name: zoneinfo
+          hostPath:
+            path: /usr/share/zoneinfo
+        - name: gpio
+          hostPath:
+            path:  {{.Values.env.serialresource}}
+        - name: persistencepath
+          hostPath:
+            path: /home/pi/sensors_data/
+        - name: gpioconfig
+          hostPath:
+            path: /home/pi/gpio_configuration/
+status: {}

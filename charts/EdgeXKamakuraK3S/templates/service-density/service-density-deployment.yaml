@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: comosyme
+  labels:
+    org.edgexfoundry.service: {{.Values.edgex.app.application.servicedensity}}
+  name: {{.Values.edgex.app.application.servicedensity}}
+spec:
+  replicas: {{.Values.edgex.replicas.application.servicedensity}}
+  selector:
+    matchLabels:
+      org.edgexfoundry.service: {{.Values.edgex.app.application.servicedensity}}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        org.edgexfoundry.service: {{.Values.edgex.app.application.servicedensity}}
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: {{.Values.edgex.app.application.servicedensity}}
+        {{- if eq .Values.architecture "arm64" }}
+        image: {{.Values.edgex.image.application.servicedensity.arm64.repository}}:{{.Values.edgex.image.application.servicedensity.arm64.tag}}
+        {{- else }}
+        image: {{.Values.edgex.image.application.servicedensity.amd64.repository}}:{{.Values.edgex.image.application.servicedensity.amd64.tag}}
+        {{- end }}
+        imagePullPolicy: {{.Values.edgex.image.application.servicedensity.pullPolicy}}
+        envFrom:
+        - configMapRef:
+            name: edgex-common-variables
+        env:
+        - name: SERVICE_HOST
+          value: {{.Values.edgex.app.application.servicedensity}}
+        ports:
+        - containerPort: {{.Values.expose.nodePort.application.servicedensity}}
+        volumeMounts:
+        - name: zoneinfo
+          mountPath: /etc/localtime
+          subPath: CET
+          readOnly: true
+        - name: persistencepath
+          mountPath: /sensors_data/
+        - name: cpuinfo
+          mountPath: /proc/
+        readinessProbe:
+          httpGet:
+            path: /api/v2/ping
+            port: 59783
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /api/v2/ping
+            port: 59783
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+      {{- if .Values.edgex.resources.application.servicedensity.enforceLimits }}
+        resources:
+          limits:
+            memory: {{ .Values.edgex.resources.application.servicedensity.limits.memory }}
+            cpu: {{ .Values.edgex.resources.application.servicedensity.limits.cpu }}
+          requests:
+            memory: {{ .Values.edgex.resources.application.servicedensity.requests.memory }}
+            cpu: {{ .Values.edgex.resources.application.servicedensity.requests.cpu }}
+      {{- end}}
+      hostname: {{.Values.edgex.app.application.servicedensity}}
+      restartPolicy: Always
+      volumes:
+        - name: zoneinfo
+          hostPath:
+            path: /usr/share/zoneinfo
+        - name: persistencepath
+          hostPath:
+            path: /home/pi/sensors_data/
+        - name: cpuinfo
+          hostPath:
+            path: /proc/
+status: {}

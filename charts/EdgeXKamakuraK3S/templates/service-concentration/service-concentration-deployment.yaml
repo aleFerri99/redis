@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: comosyme
+  labels:
+    org.edgexfoundry.service: {{.Values.edgex.app.application.serviceconcentration}}
+  name: {{.Values.edgex.app.application.serviceconcentration}}
+spec:
+  replicas: {{.Values.edgex.replicas.application.serviceconcentration}}
+  selector:
+    matchLabels:
+      org.edgexfoundry.service: {{.Values.edgex.app.application.serviceconcentration}}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        org.edgexfoundry.service: {{.Values.edgex.app.application.serviceconcentration}}
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: {{.Values.edgex.app.application.serviceconcentration}}
+        {{- if eq .Values.architecture "arm64" }}
+        image: {{.Values.edgex.image.application.serviceconcentration.arm64.repository}}:{{.Values.edgex.image.application.serviceconcentration.arm64.tag}}
+        {{- else }}
+        image: {{.Values.edgex.image.application.serviceconcentration.amd64.repository}}:{{.Values.edgex.image.application.serviceconcentration.amd64.tag}}
+        {{- end }}
+        imagePullPolicy: {{.Values.edgex.image.application.serviceconcentration.pullPolicy}}
+        command: ["/app-concentration-mqtt-telegraf"]
+        args: ["-cp=consul.http://edgex-core-consul:8500", "--registry", "--confdir=/res"]
+        envFrom:
+        - configMapRef:
+            name: edgex-common-variables
+        env:
+        - name: SERVICE_HOST
+          value: {{.Values.edgex.app.application.serviceconcentration}}
+        ports:
+        - containerPort: {{.Values.expose.nodePort.application.serviceconcentration}}
+        volumeMounts:
+        - name: zoneinfo
+          mountPath: /etc/localtime
+          subPath: CET
+          readOnly: true
+        - name: persistencepath
+          mountPath: /sensors_data/
+        - name: cpuinfo
+          mountPath: /proc/
+        readinessProbe:
+          httpGet:
+            path: /api/v2/ping
+            port: 59784
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /api/v2/ping
+            port: 59784
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+      {{- if .Values.edgex.resources.application.serviceconcentration.enforceLimits }}
+        resources:
+          limits:
+            memory: {{ .Values.edgex.resources.application.serviceconcentration.limits.memory }}
+            cpu: {{ .Values.edgex.resources.application.serviceconcentration.limits.cpu }}
+          requests:
+            memory: {{ .Values.edgex.resources.application.serviceconcentration.requests.memory }}
+            cpu: {{ .Values.edgex.resources.application.serviceconcentration.requests.cpu }}
+      {{- end}}
+      hostname: {{.Values.edgex.app.application.serviceconcentration}}
+      restartPolicy: Always
+      volumes:
+        - name: zoneinfo
+          hostPath:
+            path: /usr/share/zoneinfo
+        - name: persistencepath
+          hostPath:
+            path: /home/pi/sensors_data/
+        - name: cpuinfo
+          hostPath:
+            path: /proc/
+status: {}

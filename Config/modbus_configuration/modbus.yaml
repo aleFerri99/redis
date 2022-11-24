@@ -1,0 +1,279 @@
+# For RTU/ASCII: serialResource: /dev/ttySC0, for TCP: serialReosurce: localhost
+
+sensors:
+  t9501:
+    name: t9501
+    poll: true
+    mode: rtu
+    modbus-properties: # Are the same for ASCII case
+      address: 0x10               # address: 0x10
+      baudrate: 115200            # port: 1234
+      databits: 8                 # timeout: 1
+      stopbits: 1                 #
+      parity: "E"                 #
+      timeout: 1                  #
+    modbus:
+      registers:
+      - 0x1389 # Firmware version register
+      - 0x138D # Relative humidity register
+      - 0x138E # Temperature register
+      - 0x0FA4 # Config flag register
+      - 0x0FA5 # Slave address register
+      - 0x0FA6 # Baud rate register
+      - 0x0FA9 # Parity register
+      read-length:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+    read-write:
+      - function-code: 0x04
+        value: 
+        - 0x00
+      - function-code: 0x04
+        value: 
+        - 0x00
+      - function-code: 0x04
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+  ph:
+    name: pH
+    poll: true
+    mode: rtu
+    modbus-properties:
+      address: 0x03
+      baudrate: 9600
+      databits: 8
+      stopbits: 1
+      parity: "N"
+      timeout: 1
+    modbus:
+      registers:
+      - 0x00 # TEMPERATURE register
+      - 0x01 # PH register
+      - 0x02 # PH_CALIBRATION_AD register
+      - 0x20 # TEMP_CMP_STATUS register
+      - 0x30 # PH_CALIB_RAW_AD0 register
+      - 0x31 # PH_CALIB_RAW_AD1 register
+      - 0x32 # PH_CALIB_RAW_AD2 register
+      - 0x0200 # SLAVE_ADDR register
+      - 0x0201 # BAUD_RATE register
+      - 0x0202 # MODBUS_PROTOCOL register
+      - 0x0203 # PARITY_BITS register
+      - 0x0204 # DATA_BITS register
+      - 0x0205 # STOP_BITS register
+      - 0x0206 # SERIAL_RESPONSE_DELAY register
+      - 0x0207 # SERIAL_ACTIVE_OUTPUT_TIME register
+      read-length:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      read-write:
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+  conductivity:
+    name: conductivity
+    poll: true
+    mode: rtu
+    modbus-properties:
+      address: 0x02
+      baudrate: 9600
+      databits: 8
+      stopbits: 1
+      parity: "N"
+      timeout: 1
+    modbus:
+      registers:
+      - 0x00 # TEMPERATURE register
+      - 0x02 # EC register
+      - 0x03 # SALINITY register
+      - 0x04 # TDS register
+      - 0x08 # EC_RAW_AD register
+      - 0x20 # TEMP_CMP_STATUS register
+      - 0x22 # EC_TEMP_COFF register
+      - 0x23 # SALINITY_COFF register
+      - 0x24 # TDS_COFF register
+      - 0x25 # ELECTRODE_CONST register
+      - 0x30 # EC_CALIB_1413 register
+      - 0x31 # EC_CALIB_12880 register
+      - 0x0200 # SLAVE_ADDR register
+      - 0x0201 # BAUD_RATE register
+      - 0x0202 # MODBUS_PROTOCOL register
+      - 0x0203 # PARITY_BITS register
+      - 0x0204 # DATA_BITS register
+      - 0x0205 # STOP_BITS register
+      - 0x0206 # SERIAL_RESPONSE_DELAY register
+      - 0x0207 # SERIAL_ACTIVE_OUTPUT_TIME register
+      read-length:
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      read-write:
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+      - function-code: 0x03
+        value: 
+        - 0x00
+  density:
+    name: density
+    poll: true
+    mode: rtu
+    modbus-properties:
+      address: 0x01
+      baudrate: 9600
+      databits: 8
+      stopbits: 1
+      parity: "N"
+      timeout: 1
+    modbus:
+      registers:
+      - 0x00 # All data
+      read-length:
+      - 6
+      read-write:
+      - function-code: 0x03
+        value: 
+        - 0x00
+

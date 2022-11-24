@@ -1,0 +1,24 @@
+apiVersion: "v2"
+name: "device-modbus"
+manufacturer: "Concept Reply"
+model: "SP-01"
+labels:
+  - "modbus"
+description: "Modbus Handler Device Service"
+
+deviceResources:
+  -
+    name: "GPIO"
+    isHidden: false
+    description: "GPIO flag to trigger modbus poll cycle"
+    properties:
+        valueType: "Bool"
+        readWrite: "RW"
+
+deviceCommands:
+-
+  name: "Modbus-Command"
+  readWrite: "W"
+  isHidden: false
+  resourceOperations:
+    - { deviceResource: "GPIO", defaultValue: "false" }

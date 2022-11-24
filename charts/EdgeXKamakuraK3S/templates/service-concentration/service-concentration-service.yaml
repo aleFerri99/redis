@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: comosyme
+  labels:
+    org.edgexfoundry.service: {{.Values.edgex.app.application.serviceconcentration}}
+  name: {{.Values.edgex.app.application.serviceconcentration}}
+spec:
+  ports:
+  - name: "59784"
+    port: 59784
+    targetPort: 59784
+    nodePort: {{.Values.expose.nodePort.application.serviceconcentration}}
+  selector:
+    org.edgexfoundry.service: {{.Values.edgex.app.application.serviceconcentration}}
+  type: {{.Values.expose.type}}
+status:
+  loadBalancer: {}

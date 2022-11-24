@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: comosyme
+  labels:
+    org.edgexfoundry.service: {{.Values.edgex.app.db.redis}}
+  name: {{.Values.edgex.app.db.redis}}
+spec:
+  replicas: {{.Values.edgex.replicas.db.redis}}   #???
+  selector:
+    matchLabels:
+      org.edgexfoundry.service: {{.Values.edgex.app.db.redis}}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        org.edgexfoundry.service: {{.Values.edgex.app.db.redis}}
+    spec:
+      containers:
+      - name: {{.Values.edgex.app.db.redis}}
+        image: {{.Values.edgex.image.db.redis.repository}}:{{.Values.edgex.image.db.redis.tag}}  #???
+        imagePullPolicy: {{.Values.edgex.image.db.redis.pullPolicy}}  #???
+        ports:
+        - containerPort: 6379
+        envFrom:
+        - configMapRef:
+            name: edgex-common-variables
+        readinessProbe:
+          tcpSocket:
+            port: 6379
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          tcpSocket:
+            port: 6379
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+      {{- if .Values.edgex.resources.db.redis.enforceLimits }}  #???
+        resources:
+          limits:
+            memory: {{ .Values.edgex.resources.db.redis.limits.memory }} #???
+            cpu: {{ .Values.edgex.resources.db.redis.limits.cpu }} #???
+          requests:
+            memory: {{ .Values.edgex.resources.db.redis.requests.memory }}  #???
+            cpu: {{ .Values.edgex.resources.db.redis.requests.cpu }}  #???
+      {{- end}}
+      hostname: {{.Values.edgex.app.db.redis}}
+      restartPolicy: Always
+      #nodeSelector:
+      #  kubernetes.io/arch: 'amd64'       
+status: {}

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: comosyme
+  labels:
+    org.edgexfoundry.service: {{.Values.edgex.app.device.modbus}}
+  name: {{.Values.edgex.app.device.modbus}}
+spec:
+  ports:
+  - name: "59999"
+    port: 59999
+    targetPort: 59999
+    nodePort: {{.Values.expose.nodePort.device.modbus}}
+  selector:
+    org.edgexfoundry.service: {{.Values.edgex.app.device.modbus}}
+  type: {{.Values.expose.type}}
+status:
+  loadBalancer: {}

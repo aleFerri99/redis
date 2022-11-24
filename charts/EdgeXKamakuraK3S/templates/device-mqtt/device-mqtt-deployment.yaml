@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: comosyme
+  labels:
+    org.edgexfoundry.service: {{.Values.edgex.app.device.mqtt}}
+  name: {{.Values.edgex.app.device.mqtt}}
+spec:
+  replicas: {{.Values.edgex.replicas.device.mqtt}}
+  selector:
+    matchLabels:
+      org.edgexfoundry.service: {{.Values.edgex.app.device.mqtt}}
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        org.edgexfoundry.service: {{.Values.edgex.app.device.mqtt}}
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: {{.Values.edgex.app.device.mqtt}}
+        {{- if eq .Values.architecture "arm64" }}
+        image: {{.Values.edgex.image.device.mqtt.arm64.repository}}:{{.Values.edgex.image.device.mqtt.arm64.tag}}
+        {{- else }}
+        image: {{.Values.edgex.image.device.mqtt.amd64.repository}}:{{.Values.edgex.image.device.mqtt.amd64.tag}}
+        {{- end }}
+        imagePullPolicy: {{.Values.edgex.image.device.mqtt.pullPolicy}}
+        command: ["/device-mqtt"]
+        args: ["-cp=consul.http://edgex-core-consul:8500", "--registry", "--confdir=/res"]
+        securityContext:
+          runAsUser: 0
+          privileged: true
+        envFrom:
+        - configMapRef:
+            name: edgex-common-variables
+        ## This override is mandatory to use device commands through core command service. SERVICE_HOST=0.0.0.0:<servicePort> will result into a connection refused error
+        env:
+        - name: SERVICE_HOST
+          value: {{.Values.edgex.app.device.mqtt}}
+        ports:
+        - containerPort: {{.Values.expose.nodePort.device.mqtt}}
+        volumeMounts:
+        - name: zoneinfo
+          mountPath: /etc/localtime
+          subPath: CET
+          readOnly: true
+        readinessProbe:
+          httpGet:
+            path: /api/v2/ping
+            port: 59998
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /api/v2/ping
+            port: 59998
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 3
+      {{- if .Values.edgex.resources.device.mqtt.enforceLimits }}
+        resources:
+          limits:
+            memory: {{ .Values.edgex.resources.device.mqtt.limits.memory }}
+            cpu: {{ .Values.edgex.resources.device.mqtt.limits.cpu }}
+          requests:
+            memory: {{ .Values.edgex.resources.device.mqtt.requests.memory }}
+            cpu: {{ .Values.edgex.resources.device.mqtt.requests.cpu }}
+      {{- end}}
+      hostname: {{.Values.edgex.app.device.mqtt}}
+      restartPolicy: Always
+      volumes:
+        - name: zoneinfo
+          hostPath:
+            path: /usr/share/zoneinfo
+status: {}

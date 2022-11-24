@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: comosyme
+  labels:
+    org.edgexfoundry.service: {{.Values.edgex.app.system.mgmtagent}}
+  name: {{.Values.edgex.app.system.mgmtagent}}
+spec:
+  ports:
+  - name: "58890"
+    port: 58890
+    targetPort: 58890
+    nodePort: {{.Values.expose.nodePort.system.mgmtagent}}
+  selector:
+    org.edgexfoundry.service: {{.Values.edgex.app.system.mgmtagent}}
+  type: {{.Values.expose.type}}
+status:
+  loadBalancer: {}
